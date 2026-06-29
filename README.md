@@ -22,7 +22,7 @@ conditions can be discovered, documented, classified, and mitigated.
   <tr>
     <td align="center">
       <b></b><br>
-      <img src="Resources/sotif_gif.gif" width="700"/>
+      <img src="Resources/Architecture_GIF.gif" width="700"/>
     </td>
   </tr>
 </table>
