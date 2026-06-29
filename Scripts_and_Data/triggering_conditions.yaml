@@ -1,0 +1,124 @@
+# ============================================================
+# SOTIF Triggering Conditions Catalogue
+# Function: Automatic Emergency Braking (AEB)
+# Standard: ISO 21448:2022
+# Owner: Functional Safety / Systems Engineering Team
+# Version: see changelog below
+# ============================================================
+#
+# Purpose
+# -------
+# This catalogue records every triggering condition the functional
+# team has identified, tested, and documented. A triggering condition
+# is any environmental, operational, or system performance condition
+# that can cause the AEB function to behave in an unsafe way without
+# any ISO 26262 hardware failure occurring.
+#
+# A hazardous scenario that matches a catalogue entry → Area 2
+# (known unsafe, documented trigger, mitigation in progress or applied).
+#
+# A hazardous scenario that matches NO catalogue entry → Area 3
+# (unknown unsafe, undiscovered trigger, catalogue is incomplete).
+#
+# Changelog
+# ---------
+# v1.0  Initial release — fog (single condition) documented after
+#       closed-track fog-chamber testing.
+# v1.1  Added high sensor noise (single condition) after hardware
+#       noise characterisation campaign.
+# v1.2  Added fog+noise interaction after Round 2 Monte Carlo
+#       analysis surfaced Area 3 cluster. This entry promotes
+#       those scenarios from Area 3 → Area 2 and enables targeted
+#       mitigation (noise filter algorithm).
+# ============================================================
+
+triggering_conditions:
+
+  # ── TC-001 ────────────────────────────────────────────────
+  - id: TC-001
+    name: Heavy fog — single condition
+    description: >
+      Dense fog reduces LiDAR/radar detection range below the level
+      required for safe stopping at ODD speeds. Identified during
+      fog-chamber testing at the proving ground.
+    status: documented        # known to the team → Area 2 qualifier
+    version_added: "v1.0"
+    conditions:
+      fog_severity:
+        operator: ">"
+        threshold: 0.50       # fog severity index, 0 = clear, 1 = dense
+    mitigation:
+      description: >
+        ODD restriction: system issues driver warning and disengages
+        autonomy when fog_severity exceeds 0.50. Cabin HMI displays
+        "Reduced visibility — manual control required."
+      round_applied: 1
+      fog_cap: 0.70           # conservative cap applied in simulation
+    references:
+      - "Test report TR-AEB-FOG-001"
+      - "HARA item H-AEB-03"
+
+  # ── TC-002 ────────────────────────────────────────────────
+  - id: TC-002
+    name: High sensor noise — single condition
+    description: >
+      Elevated sensor noise standard deviation (e.g. due to
+      temperature extremes or electromagnetic interference) increases
+      range-measurement uncertainty, effectively reducing usable
+      detection range. Identified during sensor characterisation.
+    status: documented
+    version_added: "v1.1"
+    conditions:
+      sensor_noise_std:
+        operator: ">"
+        threshold: 1.50       # m, noise std dev above which degradation is significant
+    mitigation:
+      description: >
+        Noise-filtering algorithm added to perception stack. Reduces
+        effective noise presented to the detection pipeline — capped at
+        1.0 m (not 0.7 m) to reflect realistic filter performance.
+        Scenarios with noise between 0.8 m and 1.0 m can still trigger
+        the fog+noise interaction penalty, which is why Area 3 persists
+        into Round 2 and is only closed in Round 3 via TC-003 + safety buffer.
+      round_applied: 2
+      noise_cap: 1.0
+    references:
+      - "Sensor characterisation report SC-AEB-002"
+      - "HARA item H-AEB-05"
+
+  # ── TC-003 ────────────────────────────────────────────────
+  - id: TC-003
+    name: Fog + sensor noise interaction
+    description: >
+      Moderate fog combined with moderate sensor noise degrades
+      detection range significantly more than either condition alone
+      would predict. This non-linear interaction was NOT present in
+      the v1.0 catalogue because fog and noise were only tested
+      independently. Discovered through Monte Carlo analysis
+      (Round 2) where a cluster of Area 3 scenarios appeared at
+      fog_severity ∈ (0.25, 0.50) and sensor_noise_std ∈ (0.8, 1.5).
+      Adding this entry reclassifies those scenarios from Area 3
+      to Area 2 and makes the interaction an explicit mitigation target.
+    status: documented
+    version_added: "v1.2"
+    conditions:
+      fog_severity:
+        operator: ">"
+        threshold: 0.25
+      sensor_noise_std:
+        operator: ">"
+        threshold: 0.80
+    mitigation:
+      description: >
+        Same noise-filtering algorithm as TC-002 (Round 2), capped at
+        1.0 m. This partially suppresses the interaction but does not
+        eliminate it — scenarios with noise between 0.8 m and 1.0 m can
+        still trigger the penalty. The additional 5 m stopping-distance
+        safety buffer (Round 3) absorbs the residual interaction effect,
+        closing Area 3 when combined with this catalogue entry promoting
+        those scenarios to Area 2.
+      round_applied: 3
+      noise_cap: 1.0
+    references:
+      - "Monte Carlo analysis report MC-AEB-R2-003"
+      - "HARA item H-AEB-07 (new, raised v1.2)"
