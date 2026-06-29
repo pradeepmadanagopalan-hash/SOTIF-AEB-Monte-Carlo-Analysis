@@ -25,7 +25,7 @@
 # v1.0  Initial release — fog (single condition) documented after
 #       closed-track fog-chamber testing.
 # v1.1  Added high sensor noise (single condition) after hardware
-#       noise characterisation campaign.
+#       noise characterisation testing. 
 # v1.2  Added fog+noise interaction after Round 2 Monte Carlo
 #       analysis surfaced Area 3 cluster. This entry promotes
 #       those scenarios from Area 3 → Area 2 and enables targeted
@@ -54,9 +54,6 @@ triggering_conditions:
         "Reduced visibility — manual control required."
       round_applied: 1
       fog_cap: 0.70           # conservative cap applied in simulation
-    references:
-      - "Test report TR-AEB-FOG-001"
-      - "HARA item H-AEB-03"
 
   # ── TC-002 ────────────────────────────────────────────────
   - id: TC-002
@@ -82,9 +79,6 @@ triggering_conditions:
         into Round 2 and is only closed in Round 3 via TC-003 + safety buffer.
       round_applied: 2
       noise_cap: 1.0
-    references:
-      - "Sensor characterisation report SC-AEB-002"
-      - "HARA item H-AEB-05"
 
   # ── TC-003 ────────────────────────────────────────────────
   - id: TC-003
@@ -119,6 +113,3 @@ triggering_conditions:
         those scenarios to Area 2.
       round_applied: 3
       noise_cap: 1.0
-    references:
-      - "Monte Carlo analysis report MC-AEB-R2-003"
-      - "HARA item H-AEB-07 (new, raised v1.2)"
