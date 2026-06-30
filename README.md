@@ -16,7 +16,7 @@ hazards by identifying:
 
 This project implements a simplified SOTIF workflow for an
 Automatic Emergency Braking (AEB) function to demonstrate how triggering
-conditions can be discovered, documented, classified, and mitigated.
+conditions can be discovered, documented, classified and mitigated.
 
 <table>
   <tr>
@@ -36,10 +36,10 @@ Automatic Emergency Braking (AEB) operates in complex, dynamic environments wher
 Traditional validation approaches are insufficient because many unsafe behaviors arise without any hardware or software failure — instead emerging from **functional limitations under specific operational conditions**, which is the core focus of SOTIF (ISO 21448).
 
 Key challenges include:
-- Validating AEB safety across a wide and continuously varying Operational Design Domain (ODD)
-- Capturing non-fault-related hazards where correct system behavior still leads to unsafe outcomes
-- Identifying non-linear interactions between conditions such as fog, sensor noise, and latency
-- Separating known unsafe conditions from previously unknown hazardous scenarios discovered through large-scale simulation
+- Validating AEB safety across a wide and continuously varying Operational Design Domain (ODD).
+- Capturing non-fault-related hazards where correct system behavior still leads to unsafe outcomes.
+- Identifying non-linear interactions between conditions such as fog, sensor noise and latency.
+- Separating known unsafe conditions from previously unknown hazardous scenarios discovered through large-scale simulation.
  
 ---
 
@@ -205,10 +205,10 @@ The simulation was executed over four successive validation rounds. As additiona
 
   - The baseline configuration resulted in a **27.1% hazardous scenario rate**, consisting primarily of **known hazards (Area 2: 26.3%)** and a small fraction of **unknown hazards (Area 3: 0.8%)**.
 
-  - In this illustrative SOTIF case study, the engineering team is assumed to have previously identified that **fog severity > 0.50** can significantly degrade the perception system and has therefore documented this as **TC-001** in the triggering-condition catalogue. Hence all runs with fog severity > 0.5 and hazard flag active are known unsafe hazards. However, we also see 0.8& of the test runs have a fog severity < 0.5 but still have a active hazard flag. These are yet to be understood or docuemnted. Hence they are unknown unsafe hazards.
-  - NOTE: It is not necessary that all simulations with fog severity > 0.5 result in a hazard. As can be seen there can be several scenarios in which despite of the heavy fog the AEB operates fine (for example if the speed of the EGO is low or if the sensor latency is low).
+  - In this illustrative SOTIF case study, the engineering team is assumed to have previously identified that **fog severity > 0.50** can significantly degrade the perception system and has therefore documented this as **TC-001** in the triggering-condition catalogue. Hence all runs with fog severity > 0.5 and hazard flag active are "known unsafe hazards". However, we also see 0.8% of the test runs have a fog severity < 0.5 but still have a active hazard flag. These are yet to be understood or documented. Hence they are "unknown unsafe hazards".
+  - NOTE: It is not necessary that all simulations with fog severity > 0.5 result in a hazard. As can be seen, there can be several scenarios in which despite of the heavy fog the AEB operates fine (for example if the speed of the EGO is low or if the sensor latency is low).
   - Now, before the next round of testing - say the fictional test team decalres a restriction in the usage of the AEB (i.e. redefines the ODD of the AEB function). They say beyond a fog severity of 0.7, the AEB will no longer function and hand over the control of the brakes to the driver with a message on the HMI. The ODD cap is set at 0.70, not 0.50, because test team has already validated standard AEB performance up to that point — the 0.50–0.70 band is a known gap covered by an enhanced AEB still in R&D.
-  - **In simpler words - a hazard between fog severeity of 0.5 and 0.7 is a known hazard which will be mitigated by ongoign R&D. However, fog severity above 0.7 is no longer part of the ODD and should not be tested in Round 1.**
+  - **In simpler words - a hazard between fog severeity of 0.5 and 0.7 is a known hazard which will be mitigated by ongoing R&D. However, fog severity above 0.7 is no longer part of the ODD and should not be tested in Round 1.**
   
 <table>
   <tr>
@@ -223,13 +223,13 @@ The simulation was executed over four successive validation rounds. As additiona
 
 - **Round 1 — Operational Design Domain (ODD) restriction**
 
-  - By restricting the **Operational Design Domain (ODD)** to reduce exposure to severe fog conditions, the total hazardous scenario rate decreased from **27.1% to 9.0%**.
+  - By restricting the **Operational Design Domain (ODD)** to reduce exposure to severe fog conditions, the total hazardous scenario rate decreases from **27.1% to 9.0%**.
 
-  - Nevertheless, the rate of **Area 3 scenarios increased slightly from 0.8% to 1.3%**. This occurs because the dominant known hazard (heavy fog) has been reduced, making the previously undiscovered fog–sensor interaction more visible within the remaining scenario population.
+  - Nevertheless, the rate of **Area 3 scenarios increases slightly from 0.8% to 1.3%**. This occurs because the dominant known hazard (heavy fog) has been reduced, making the previously undiscovered hazards more visible within the remaining scenario population.
  
-  - From this round of SOTIF analysis, it is clear that there exists a region of unknown hazards i.e. although the fog severity < 0.5, the runs end up as being hazards. The common pattern among all area 3 runs is clearly that they occur from moderate to high sensor noise standard deviation. Hence the fictional test team must now validate this finding and bring out scientiic evidence to support the claim that moderate to high sensor noise causes drop in performance of AEB and put an accurate number to this.
+  - From this round of SOTIF analysis, it is clear that there exists a region of unknown hazards i.e. although the fog severity < 0.5, the runs end up as being hazards. The common pattern among all area 3 runs is clearly that they occur from moderate to high sensor noise standard deviation. Hence the fictional test team must now validate this finding and bring out scientiic evidence to support or disprove the claim that moderate to high sensor noise causes drop in performance of AEB and put an accurate number to this.
  
-  - The team carries out tests and comes back with scientififc evidence that whenever the sensor noise is above 1.50, the AEB perfromance drops and docuemnts this as **TC-002** in the live catalog. Hence the catalog now has 2 known trggers (fog > 0.5 and Sensor Noise > 1.5) and 1 ODD restrcition (fog > 0.7) as fixed by the test team.
+  - The team carries out tests and comes back with scientififc evidence that whenever the sensor noise is above 1.50, the AEB perfromance drops and documents this as **TC-002** in the live catalog. Hence the catalog now has 2 known trggers (fog > 0.5 and Sensor Noise > 1.5) and 1 ODD restrcition (fog > 0.7) as fixed by the test team.
  
   - We run the next set of Monte Carlo simulations with these rules. 
 
@@ -248,17 +248,16 @@ The simulation was executed over four successive validation rounds. As additiona
 
   - In this illustrative workflow, the engineering team is assumed to have identified **sensor noise > 1.50 m** as another hazardous operating condition and documented it as **TC-002**.
 
-  - With the updated catalogue, the known unsafe scenarios increae (7.8% in Round 1 to 9.2 percentage in Round 2) while the unknon unsafe scenarios decresae (1.3% in Round 1 to 0.5 % in round 2) as expected.
+  - With the updated catalogue, the known unsafe scenarios increase (7.8% in Round 1 to 9.2% in Round 2) while the unknon unsafe scenarios decresae (1.3% in Round 1 to 0.5% in round 2) as expected.
  
   -   However, a small cluster of scenarios with:
-
 
       - **fog severity > 0.25**, and
       - **sensor noise between approximately 0.8 m and 1.5 m**
 
-  continued to produce hazardous behavior and hence these scenarios remained classified as **Area 3**. If one were to guess these scenarios might probably arise due to the interaction effects of the fog and the sensor noise. Although niether of them ny themselves is severe enough to degrade the perfoance of the AEB, when both values are moderate enough maybe the AEB's perfromance drops.
+  continue to produce hazardous behavior and hence these scenarios remained classified as **Area 3**. If one were to guess these scenarios might probably arise due to the interaction effects of the fog and the sensor noise. Although niether of them by themselves is severe enough to degrade the performance of the AEB, when both values are moderate enough maybe the AEB's performance drops.
   
-  -   Hence this will now be the next target of the testing team - i.e. to prove/ disprve scientifically that intercation effects exist and once again put solid numbers to it.
+  -   Hence this will now be the next target of the testing team - i.e. to prove/ disprove scientifically that intercation effects exist and once again put concrete numbers to it.
  
   -   Analysis of the residual hazardous scenarios revealed that the combination:
 
@@ -285,7 +284,7 @@ The simulation was executed over four successive validation rounds. As additiona
 
   - This finally results in an **unknown hazard percenatge of 0.00%**. 
 
-  - Although the final hazardous scenario rate increased slightly to **13.1%**, this reflects a key principle of SOTIF: the objective is not necessarily to eliminate all hazards, but to ensure that hazardous scenarios are identified, understood, documented, and mitigated. These 13.1% of hazards are identified, understood and docuemnted. Mitigation of these hazards in not within the scope of this repo.
+  - Although the final hazardous scenario rate increases slightly to **13.1%**, this reflects a key principle of SOTIF: the objective is not necessarily to eliminate all hazards, but to ensure that hazardous scenarios are identified, understood, documented and mitigated. These 13.1% of hazards are identified, understood and documented. Mitigation of these hazards in not within the scope of this repo.
 
 
 <table>
@@ -301,7 +300,7 @@ The simulation was executed over four successive validation rounds. As additiona
 
 - **Evolution of Test Space for Unknown Hazards**
 
-The figure below shows how the test space for the test team evolved after every round of monte carlo simulation using the updated trigger catalogue. In simpler words, the highlighted region in the density maps represents the region where the testing team should ideally focus to discover scientifi creasoning behind unknown - unsafe hazards. 
+The figure below shows how the test space for the test team evolved after every round of monte carlo simulation using the updated trigger catalogue. In simpler words, the highlighted region in the density maps represents the region where the testing team should ideally focus their efforts to discover scientific reasoning behind unknown - unsafe hazards. 
 
 <table>
   <tr>
